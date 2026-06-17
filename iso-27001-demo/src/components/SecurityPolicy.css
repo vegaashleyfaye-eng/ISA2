@@ -1,0 +1,157 @@
+.security-policy {
+  max-width: 1000px;
+  position: relative;
+  z-index: 2;
+}
+
+.policy-header {
+  margin-bottom: 32px;
+  text-align: center;
+}
+
+.policy-header h2 {
+  font-size: 32px;
+  color: #ffffff;
+  margin-bottom: 8px;
+  font-weight: 700;
+}
+
+.policy-header p {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 16px;
+}
+
+.policies-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.policy-card {
+  background: #ffffff;
+  border: none;
+  border-radius: 12px;
+  overflow: hidden;
+  transition: all 0.3s;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.policy-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+}
+
+.policy-title {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 20px 24px;
+  background: #ffffff;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.2s;
+  font-size: 16px;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.policy-title:hover {
+  background: #f9fafb;
+}
+
+.policy-icon {
+  font-size: 28px;
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f3f4f6;
+  border-radius: 8px;
+}
+
+.policy-name {
+  flex: 1;
+  font-size: 18px;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.policy-title svg {
+  color: #6b7280;
+  flex-shrink: 0;
+}
+
+.policy-content {
+  padding: 0 24px 24px 24px;
+  background: #f9fafb;
+  border-top: 1px solid #e5e7eb;
+}
+
+.policy-content ul {
+  list-style: none;
+  padding: 0;
+  margin: 16px 0 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.policy-content li {
+  display: flex;
+  gap: 12px;
+  font-size: 14px;
+  color: #4b5563;
+  align-items: flex-start;
+  line-height: 1.6;
+}
+
+.bullet {
+  color: #10b981;
+  font-weight: bold;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.policy-footer {
+  padding: 20px 24px;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  text-align: center;
+}
+
+.policy-footer p {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.8);
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  .policy-card {
+    margin: 0 -8px;
+  }
+  
+  .policy-title {
+    padding: 16px 20px;
+  }
+  
+  .policy-content {
+    padding: 0 20px 20px 20px;
+  }
+  
+  .policy-icon {
+    font-size: 24px;
+    width: 36px;
+    height: 36px;
+  }
+  
+  .policy-name {
+    font-size: 16px;
+  }
+}
