@@ -1,5 +1,6 @@
 .security-policy {
   max-width: 1000px;
+  margin: 0 auto;
   position: relative;
   z-index: 2;
 }
@@ -11,14 +12,14 @@
 
 .policy-header h2 {
   font-size: 32px;
-  color: #ffffff;
+  color: var(--primary);
   margin-bottom: 8px;
   font-weight: 700;
 }
 
 .policy-header p {
-  color: rgba(255, 255, 255, 0.8);
-  font-size: 16px;
+  color: #475569;
+  font-size: 17px;
 }
 
 .policies-grid {
@@ -104,8 +105,8 @@
 .policy-content li {
   display: flex;
   gap: 12px;
-  font-size: 14px;
-  color: #4b5563;
+  font-size: 16px;
+  color: #334155;
   align-items: flex-start;
   line-height: 1.6;
 }
@@ -119,16 +120,15 @@
 
 .policy-footer {
   padding: 20px 24px;
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
   border-radius: 12px;
   text-align: center;
 }
 
 .policy-footer p {
-  font-size: 14px;
-  color: rgba(255, 255, 255, 0.8);
+  font-size: 16px;
+  color: #1e40af;
   margin: 0;
 }
 

@@ -10,10 +10,10 @@ export default function Dashboard({ user, onLogout, currentPage, setCurrentPage 
   const [sidebarOpen, setSidebarOpen] = useState(false)
 
   const menuItems = [
-    { id: 'policy', label: 'Security Policy', icon: '📋' },
-    { id: 'password', label: 'Password Checker', icon: '🔐' },
-    { id: 'checklist', label: 'Compliance Checklist', icon: '✓' },
-    { id: 'quiz', label: 'Security Quiz', icon: '❓' }
+    { id: 'policy', label: 'Security Policy' },
+    { id: 'password', label: 'Password Checker' },
+    { id: 'checklist', label: 'Compliance Checklist' },
+    { id: 'quiz', label: 'Security Quiz' }
   ]
 
   return (
@@ -44,7 +44,6 @@ export default function Dashboard({ user, onLogout, currentPage, setCurrentPage 
                   setSidebarOpen(false)
                 }}
               >
-                <span className="icon">{item.icon}</span>
                 <span>{item.label}</span>
               </button>
             ))}
@@ -52,7 +51,7 @@ export default function Dashboard({ user, onLogout, currentPage, setCurrentPage 
           <div className="session-info">
             <p><strong>User:</strong> {user?.email}</p>
             <p><strong>Login:</strong> {user?.loginTime}</p>
-            <p><strong>MFA:</strong> {user?.mfaEnabled ? '✓ Enabled' : '✗ Disabled'}</p>
+            <p><strong>MFA:</strong> {user?.mfaEnabled ? 'Enabled' : 'Disabled'}</p>
           </div>
         </aside>
 

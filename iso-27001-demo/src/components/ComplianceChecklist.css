@@ -1,5 +1,6 @@
 .compliance-checklist {
   max-width: 1000px;
+  margin: 0 auto;
 }
 
 .checklist-header {
@@ -7,14 +8,14 @@
 }
 
 .checklist-header h2 {
-  font-size: 28px;
+  font-size: 32px;
   color: var(--primary);
   margin-bottom: 8px;
 }
 
 .checklist-header p {
-  color: #6b7280;
-  font-size: 15px;
+  color: #475569;
+  font-size: 17px;
 }
 
 .stats-grid {
@@ -62,8 +63,8 @@
 }
 
 .stat-label {
-  font-size: 13px;
-  color: #6b7280;
+  font-size: 15px;
+  color: #475569;
   font-weight: 500;
 }
 
@@ -92,8 +93,8 @@
 }
 
 .progress-text {
-  font-size: 14px;
-  color: #6b7280;
+  font-size: 16px;
+  color: #475569;
   margin: 0;
 }
 
@@ -110,7 +111,7 @@
   border: 1px solid var(--border);
   border-radius: 20px;
   cursor: pointer;
-  font-size: 13px;
+  font-size: 15px;
   font-weight: 500;
   color: #6b7280;
   transition: all 0.2s;
@@ -200,13 +201,13 @@
 }
 
 .item-name {
-  font-size: 15px;
+  font-size: 17px;
   color: var(--primary);
   font-weight: 500;
 }
 
 .item-status {
-  font-size: 13px;
+  font-size: 15px;
   font-weight: 600;
   white-space: nowrap;
 }
@@ -221,7 +222,7 @@
 
 .checklist-footer p {
   margin: 0;
-  font-size: 13px;
+  font-size: 16px;
   color: #1e40af;
 }
 
