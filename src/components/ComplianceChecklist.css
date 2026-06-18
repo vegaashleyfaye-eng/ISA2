@@ -1,0 +1,223 @@
+/* ── Compliance Checklist ───────────────────────────────────────────── */
+.compliance-checklist {
+  max-width: 860px;
+}
+
+.checklist-header {
+  margin-bottom: 28px;
+}
+
+.checklist-header h2 {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--gray-900);
+  margin-bottom: 4px;
+}
+
+.checklist-header p {
+  color: var(--gray-600);
+  font-size: 14px;
+}
+
+/* Stats */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.stat-card {
+  background: var(--surface);
+  border: 1px solid var(--gray-300);
+  border-radius: 8px;
+  padding: 18px 16px;
+  text-align: center;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+}
+
+.stat-card.completed   { border-top: 3px solid var(--success); }
+.stat-card.in-progress { border-top: 3px solid var(--warning); }
+.stat-card.pending     { border-top: 3px solid var(--danger); }
+.stat-card.total       { border-top: 3px solid var(--gray-600); }
+
+.stat-number {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--gray-900);
+  margin-bottom: 2px;
+}
+
+.stat-label {
+  font-size: 12px;
+  color: var(--gray-500);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+/* Progress */
+.progress-section {
+  background: var(--surface);
+  border: 1px solid var(--gray-300);
+  border-radius: 8px;
+  padding: 18px 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+}
+
+.progress-bar {
+  width: 100%;
+  height: 8px;
+  background: var(--gray-200);
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 10px;
+}
+
+.progress-fill {
+  height: 100%;
+  background: var(--gray-700);
+  transition: width 0.4s ease;
+  border-radius: 4px;
+}
+
+.progress-text {
+  font-size: 13px;
+  color: var(--gray-600);
+  margin: 0;
+}
+
+/* Filters */
+.category-filters {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.filter-btn {
+  padding: 5px 14px;
+  background: var(--surface);
+  border: 1px solid var(--gray-300);
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--gray-600);
+  transition: all 0.15s;
+  font-family: inherit;
+}
+
+.filter-btn:hover {
+  border-color: var(--gray-500);
+  color: var(--gray-800);
+  background: var(--gray-50);
+}
+
+.filter-btn.active {
+  background: var(--gray-800);
+  color: #ffffff;
+  border-color: var(--gray-800);
+}
+
+/* Items */
+.checklist-items {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.checklist-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 13px 16px;
+  background: var(--surface);
+  border: 1px solid var(--gray-200);
+  border-radius: 8px;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.checklist-item:hover {
+  border-color: var(--gray-400);
+  box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+}
+
+.status-btn {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 2px solid var(--gray-300);
+  background: var(--gray-50);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: all 0.15s;
+  color: var(--gray-500);
+  padding: 0;
+}
+
+.status-btn:hover { border-color: var(--gray-600); }
+
+.status-btn.completed {
+  background: var(--success);
+  border-color: var(--success);
+  color: #ffffff;
+}
+
+.status-btn.in-progress {
+  background: var(--warning);
+  border-color: var(--warning);
+  color: #ffffff;
+}
+
+.status-btn.pending {
+  background: var(--danger);
+  border-color: var(--danger);
+  color: #ffffff;
+}
+
+.item-details { flex: 1; }
+
+.item-category {
+  font-size: 10px;
+  color: var(--gray-500);
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+
+.item-name {
+  font-size: 14px;
+  color: var(--gray-800);
+  font-weight: 500;
+}
+
+.item-status {
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* Footer hint */
+.checklist-footer {
+  padding: 12px 16px;
+  background: var(--gray-100);
+  border: 1px solid var(--gray-200);
+  border-radius: 8px;
+  margin-top: 16px;
+}
+
+.checklist-footer p {
+  margin: 0;
+  font-size: 12px;
+  color: var(--gray-500);
+}
+
+@media (max-width: 768px) {
+  .stats-grid { grid-template-columns: repeat(2, 1fr); }
+}
