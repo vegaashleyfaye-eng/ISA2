@@ -12,7 +12,7 @@ export default function PasswordChecker() {
     { label: 'Password must include at least 1 lowercase letter', icon: 'a', test: (pwd) => /[a-z]/.test(pwd) },
     { label: 'Password must include at least 1 number', icon: '123', test: (pwd) => /[0-9]/.test(pwd) },
     { label: 'Password must include at least 1 symbol', icon: '!@#', test: (pwd) => /[!@#$%^&*]/.test(pwd) },
-    { label: 'Password must not contain spaces', icon: '⊘', test: (pwd) => !/\s/.test(pwd) },
+    { label: 'Password must not contain spaces', icon: '✓', test: (pwd) => !/\s/.test(pwd) },
     { label: 'Password must not be a common or weak password', icon: '🛡️', test: (pwd) => {
       const common = ['123', '456', 'abc', 'password', 'qwerty', 'admin']
       return !common.some(pattern => pwd.toLowerCase().includes(pattern))
@@ -91,7 +91,9 @@ export default function PasswordChecker() {
               <div key={idx} className={`guideline ${result.passed ? 'passed' : 'failed'}`}>
                 <div className="guideline-icon">{result.icon}</div>
                 <span className="guideline-text">{result.label}</span>
-                <div className={`guideline-circle ${result.passed ? 'filled' : 'empty'}`}></div>
+                <div className={`guideline-circle ${result.passed ? 'filled' : 'empty'}`}>
+                  {result.passed ? '✓' : ''}
+                </div>
               </div>
             ))}
           </div>
@@ -101,7 +103,7 @@ export default function PasswordChecker() {
           <h3>Password Strength Rating</h3>
           <div className="strength-box">
             <div className="strength-badge">🛡️ Rating: <strong>{strength.rating}</strong></div>
-            <div className="strength-bars">
+            <div className={`strength-bars ${strength.rating === 'Too Weak' ? 'too-weak' : strength.rating === 'Good' ? 'good' : strength.rating === 'Strong' ? 'strong' : strength.rating === 'Very Strong' ? 'very-strong' : ''}`}>
               {[1, 2, 3, 4].map(i => (
                 <div key={i} className={`bar ${i <= Math.ceil((passedCount / results.length) * 4) ? 'filled' : ''}`}></div>
               ))}

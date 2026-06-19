@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Check, X, Volume2 } from 'lucide-react'
 import './SecurityQuiz.css'
 
@@ -89,6 +89,150 @@ export default function SecurityQuiz() {
       ],
       correct: 2,
       explanation: 'After 5 failed login attempts, the account is automatically locked to prevent unauthorized access attempts.'
+    },
+    {
+      id: 9,
+      question: 'What is the primary goal of ISO 27001?',
+      options: [
+        'Increase company profits',
+        'Protect information assets through risk management',
+        'Improve website performance',
+        'Reduce employee workload'
+      ],
+      correct: 1,
+      explanation: 'The primary goal of ISO 27001 is to protect information assets through comprehensive risk management and security controls.'
+    },
+    {
+      id: 10,
+      question: 'Which of the following is considered confidential information?',
+      options: [
+        'Public advertisements',
+        'Company logo',
+        'Employee salary records',
+        'Published press releases'
+      ],
+      correct: 2,
+      explanation: 'Employee salary records are confidential information that must be protected and only accessible to authorized personnel.'
+    },
+    {
+      id: 11,
+      question: 'What should you do before opening an email attachment from an unknown sender?',
+      options: [
+        'Open it immediately',
+        'Forward it to colleagues',
+        'Verify the sender and scan for threats',
+        'Delete all emails'
+      ],
+      correct: 2,
+      explanation: 'Always verify the sender and scan attachments for threats before opening them to prevent malware infections.'
+    },
+    {
+      id: 12,
+      question: 'What is phishing?',
+      options: [
+        'A software update process',
+        'An attempt to trick users into revealing sensitive information',
+        'A data backup method',
+        'A type of firewall'
+      ],
+      correct: 1,
+      explanation: 'Phishing is a fraudulent attempt to trick users into revealing sensitive information by impersonating trusted sources.'
+    },
+    {
+      id: 13,
+      question: 'Which principle ensures that information is accessible only to authorized individuals?',
+      options: [
+        'Availability',
+        'Integrity',
+        'Confidentiality',
+        'Authentication'
+      ],
+      correct: 2,
+      explanation: 'Confidentiality is the principle that ensures information is accessible only to authorized individuals through access controls.'
+    },
+    {
+      id: 14,
+      question: 'Which action helps protect sensitive information on your workstation?',
+      options: [
+        'Sharing passwords with coworkers',
+        'Leaving your computer unlocked',
+        'Locking your screen when away',
+        'Writing passwords on sticky notes'
+      ],
+      correct: 2,
+      explanation: 'Locking your screen when away is a critical security practice to prevent unauthorized access to sensitive information.'
+    },
+    {
+      id: 15,
+      question: 'What is the purpose of data backup?',
+      options: [
+        'To increase internet speed',
+        'To recover data in case of loss or damage',
+        'To improve password strength',
+        'To monitor employee activities'
+      ],
+      correct: 1,
+      explanation: 'Data backup is essential for recovering information in case of loss, damage, or security incidents.'
+    },
+    {
+      id: 16,
+      question: 'Which of the following is an example of social engineering?',
+      options: [
+        'Installing antivirus software',
+        'Updating operating systems',
+        'Impersonating IT support to obtain passwords',
+        'Encrypting files'
+      ],
+      correct: 2,
+      explanation: 'Social engineering is a manipulation tactic, such as impersonating IT support, used to trick people into revealing sensitive information.'
+    },
+    {
+      id: 17,
+      question: 'Why is software patching important?',
+      options: [
+        'It changes the user interface',
+        'It removes unnecessary files',
+        'It fixes security vulnerabilities and bugs',
+        'It increases storage capacity'
+      ],
+      correct: 2,
+      explanation: 'Software patching is critical as it fixes security vulnerabilities and bugs that could be exploited by attackers.'
+    },
+    {
+      id: 18,
+      question: 'What should you do if you receive a suspicious email?',
+      options: [
+        'Click the links to investigate',
+        'Reply asking for more details',
+        'Report it to the IT/Security team',
+        'Forward it to everyone'
+      ],
+      correct: 2,
+      explanation: 'Always report suspicious emails to the IT/Security team for investigation rather than interacting with them directly.'
+    },
+    {
+      id: 19,
+      question: 'Which of the following is a secure practice for password management?',
+      options: [
+        'Using the same password for all accounts',
+        'Sharing passwords with trusted coworkers',
+        'Using unique passwords for different accounts',
+        'Storing passwords in a public document'
+      ],
+      correct: 2,
+      explanation: 'Using unique passwords for different accounts significantly reduces the risk of unauthorized access across multiple systems.'
+    },
+    {
+      id: 20,
+      question: 'What is the purpose of access control?',
+      options: [
+        'To increase internet bandwidth',
+        'To restrict access to authorized users only',
+        'To monitor printer usage',
+        'To reduce hardware costs'
+      ],
+      correct: 1,
+      explanation: 'Access control ensures that only authorized users can access specific resources and information, maintaining security and confidentiality.'
     }
   ]
 
@@ -98,13 +242,25 @@ export default function SecurityQuiz() {
   const [score, setScore] = useState(0)
   const [showResults, setShowResults] = useState(false)
   const [answers, setAnswers] = useState([])
+  const [shuffledQuestions, setShuffledQuestions] = useState([])
+
+  const shuffleQuestions = () => {
+    const shuffled = [...quizData].sort(() => Math.random() - 0.5)
+    setShuffledQuestions(shuffled)
+  }
+
+  useEffect(() => {
+    shuffleQuestions()
+  }, [])
+
+  const currentQuizData = shuffledQuestions.length > 0 ? shuffledQuestions : quizData
 
   const handleAnswerClick = (index) => {
     if (!answered) {
       setSelectedAnswer(index)
-      const isCorrect = index === quizData[currentQuestion].correct
+      const isCorrect = index === currentQuizData[currentQuestion].correct
       setAnswered(true)
-      setAnswers([...answers, { questionId: quizData[currentQuestion].id, userAnswer: index, correct: isCorrect }])
+      setAnswers([...answers, { questionId: currentQuizData[currentQuestion].id, userAnswer: index, correct: isCorrect }])
       if (isCorrect) {
         setScore(score + 1)
       }
@@ -112,7 +268,7 @@ export default function SecurityQuiz() {
   }
 
   const handleNext = () => {
-    if (currentQuestion < quizData.length - 1) {
+    if (currentQuestion < currentQuizData.length - 1) {
       setCurrentQuestion(currentQuestion + 1)
       setSelectedAnswer(null)
       setAnswered(false)
@@ -122,6 +278,7 @@ export default function SecurityQuiz() {
   }
 
   const handleRestart = () => {
+    shuffleQuestions()
     setCurrentQuestion(0)
     setSelectedAnswer(null)
     setAnswered(false)
@@ -131,7 +288,7 @@ export default function SecurityQuiz() {
   }
 
   if (showResults) {
-    const percentage = Math.round((score / quizData.length) * 100)
+    const percentage = Math.round((score / currentQuizData.length) * 100)
     const passed = percentage >= 70
 
     return (
@@ -142,7 +299,7 @@ export default function SecurityQuiz() {
           </div>
           <h2>{passed ? 'Great Job!' : 'Keep Learning'}</h2>
           <div className="results-score">
-            <div className="score-number">{score}/{quizData.length}</div>
+            <div className="score-number">{score}/{currentQuizData.length}</div>
             <div className="score-percentage">{percentage}%</div>
           </div>
           <p className="results-message">
@@ -154,7 +311,7 @@ export default function SecurityQuiz() {
           <div className="results-breakdown">
             <h3>Review Your Answers</h3>
             <div className="answer-review">
-              {quizData.map((q, idx) => {
+              {currentQuizData.map((q, idx) => {
                 const userAnswer = answers.find(a => a.questionId === q.id)
                 const isCorrect = userAnswer?.correct
                 return (
@@ -187,8 +344,8 @@ export default function SecurityQuiz() {
     )
   }
 
-  const question = quizData[currentQuestion]
-  const progress = ((currentQuestion + 1) / quizData.length) * 100
+  const question = currentQuizData[currentQuestion]
+  const progress = ((currentQuestion + 1) / currentQuizData.length) * 100
 
   return (
     <div className="security-quiz">
@@ -203,7 +360,7 @@ export default function SecurityQuiz() {
             <div className="progress-fill" style={{ width: `${progress}%` }} />
           </div>
           <div className="progress-text">
-            Question {currentQuestion + 1} of {quizData.length}
+            Question {currentQuestion + 1} of {currentQuizData.length}
           </div>
         </div>
 
@@ -240,7 +397,7 @@ export default function SecurityQuiz() {
 
         {answered && (
           <button className="btn-next" onClick={handleNext}>
-            {currentQuestion === quizData.length - 1 ? 'View Results' : 'Next Question'}
+            {currentQuestion === currentQuizData.length - 1 ? 'View Results' : 'Next Question'}
           </button>
         )}
 
