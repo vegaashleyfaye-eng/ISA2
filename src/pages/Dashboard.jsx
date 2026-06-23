@@ -4,6 +4,7 @@ import SecurityPolicy from '../components/SecurityPolicy'
 import PasswordChecker from '../components/PasswordChecker'
 import ComplianceChecklist from '../components/ComplianceChecklist'
 import SecurityQuiz from '../components/SecurityQuiz'
+import SessionManagement from '../components/SessionManagement'
 import './Dashboard.css'
 
 export default function Dashboard({ user, onLogout, currentPage, setCurrentPage }) {
@@ -13,7 +14,8 @@ export default function Dashboard({ user, onLogout, currentPage, setCurrentPage 
     { id: 'policy', label: 'Security Policy' },
     { id: 'password', label: 'Password Checker' },
     { id: 'checklist', label: 'Compliance Checklist' },
-    { id: 'quiz', label: 'Security Quiz' }
+    { id: 'quiz', label: 'Security Quiz' },
+    { id: 'sessions', label: 'Session Management' }
   ]
 
   return (
@@ -60,6 +62,7 @@ export default function Dashboard({ user, onLogout, currentPage, setCurrentPage 
           {currentPage === 'password' && <PasswordChecker />}
           {currentPage === 'checklist' && <ComplianceChecklist />}
           {currentPage === 'quiz' && <SecurityQuiz />}
+          {currentPage === 'sessions' && <SessionManagement />}
         </main>
       </div>
 
