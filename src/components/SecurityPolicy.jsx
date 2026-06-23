@@ -8,7 +8,6 @@ export default function SecurityPolicy() {
   const policies = [
     {
       title: 'Access Control Policy',
-      icon: '🔐',
       content: [
         'Implement role-based access control (RBAC)',
         'Multi-factor authentication required for all users',
@@ -18,7 +17,6 @@ export default function SecurityPolicy() {
     },
     {
       title: 'Password Policy',
-      icon: '🔑',
       content: [
         'Minimum 8 characters required',
         'Must contain uppercase, lowercase, numbers, special characters',
@@ -29,7 +27,6 @@ export default function SecurityPolicy() {
     },
     {
       title: 'Data Protection',
-      icon: '📊',
       content: [
         'All data encrypted in transit (TLS 1.2+)',
         'Sensitive data encrypted at rest',
@@ -40,7 +37,6 @@ export default function SecurityPolicy() {
     },
     {
       title: 'Incident Response',
-      icon: '🚨',
       content: [
         'Report security incidents within 24 hours',
         'Incident classification by severity',
@@ -51,7 +47,6 @@ export default function SecurityPolicy() {
     },
     {
       title: 'Audit & Monitoring',
-      icon: '📋',
       content: [
         'All user activities logged',
         'Real-time security alerts',
@@ -62,7 +57,6 @@ export default function SecurityPolicy() {
     },
     {
       title: 'Training & Awareness',
-      icon: '👥',
       content: [
         'Annual security training for all employees',
         'New hire training within first week',
@@ -90,7 +84,6 @@ export default function SecurityPolicy() {
               className="policy-title"
               onClick={() => setExpandedSection(expandedSection === idx ? -1 : idx)}
             >
-              <span className="policy-icon">{policy.icon}</span>
               <span className="policy-name">{policy.title}</span>
               {expandedSection === idx ? (
                 <ChevronUp size={20} />

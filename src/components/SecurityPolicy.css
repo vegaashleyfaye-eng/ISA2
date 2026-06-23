@@ -1,55 +1,55 @@
 /* ── Security Policy ────────────────────────────────────────────────── */
 .security-policy {
-  max-width: 800px;
+  max-width: 900px;
 }
 
 .policy-header {
-  margin-bottom: 28px;
+  margin-bottom: 36px;
 }
 
 .policy-header h2 {
-  font-size: 22px;
+  font-size: 30px;
   font-weight: 700;
   color: var(--gray-900);
-  margin-bottom: 4px;
+  margin-bottom: 6px;
 }
 
 .policy-header p {
   color: var(--gray-600);
-  font-size: 14px;
+  font-size: 16px;
 }
 
 .policies-grid {
   display: flex;
   flex-direction: column;
-  gap: 6px;
-  margin-bottom: 28px;
+  gap: 10px;
+  margin-bottom: 36px;
 }
 
 .policy-card {
   background: var(--surface);
   border: 1px solid var(--gray-300);
-  border-radius: 8px;
+  border-radius: 10px;
   overflow: hidden;
   transition: border-color 0.15s, box-shadow 0.15s;
 }
 
 .policy-card:hover {
   border-color: var(--gray-400);
-  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.07);
 }
 
 .policy-title {
   width: 100%;
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 15px 20px;
+  gap: 14px;
+  padding: 20px 24px;
   background: var(--surface);
   border: none;
   cursor: pointer;
   text-align: left;
-  font-size: 14px;
+  font-size: 17px;
   font-weight: 600;
   color: var(--gray-800);
   transition: background 0.15s;
@@ -57,22 +57,9 @@
 
 .policy-title:hover { background: var(--gray-50); }
 
-.policy-icon {
-  font-size: 18px;
-  width: 34px;
-  height: 34px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--gray-100);
-  border: 1px solid var(--gray-200);
-  border-radius: 6px;
-  flex-shrink: 0;
-}
-
 .policy-name {
   flex: 1;
-  font-size: 14px;
+  font-size: 17px;
   font-weight: 600;
   color: var(--gray-800);
 }
@@ -83,7 +70,7 @@
 }
 
 .policy-content {
-  padding: 0 20px 20px 20px;
+  padding: 0 24px 24px 24px;
   background: var(--gray-50);
   border-top: 1px solid var(--gray-200);
 }
@@ -91,16 +78,16 @@
 .policy-content ul {
   list-style: none;
   padding: 0;
-  margin: 14px 0 0;
+  margin: 18px 0 0;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 14px;
 }
 
 .policy-content li {
   display: flex;
-  gap: 10px;
-  font-size: 13px;
+  gap: 12px;
+  font-size: 15px;
   color: var(--gray-700);
   align-items: flex-start;
   line-height: 1.6;
@@ -114,15 +101,15 @@
 }
 
 .policy-footer {
-  padding: 14px 20px;
+  padding: 16px 24px;
   background: var(--surface);
   border: 1px solid var(--gray-300);
-  border-radius: 8px;
+  border-radius: 10px;
   text-align: center;
 }
 
 .policy-footer p {
-  font-size: 12px;
+  font-size: 14px;
   color: var(--gray-500);
   margin: 0;
 }

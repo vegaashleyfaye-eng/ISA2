@@ -402,7 +402,7 @@ export default function SecurityQuiz() {
         )}
 
         <div className="quiz-footer">
-          <p>🎓 ISO 27001 Information Security Management</p>
+          <p>ISO 27001 Information Security Management</p>
         </div>
       </div>
     </div>
