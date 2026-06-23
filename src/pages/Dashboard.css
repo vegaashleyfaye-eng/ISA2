@@ -29,38 +29,6 @@
   letter-spacing: 0.1px;
 }
 
-.user-info {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-}
-
-.user-info span {
-  font-size: 15px;
-  color: var(--gray-400);
-}
-
-.logout-btn {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  background: var(--gray-700);
-  color: var(--gray-200);
-  padding: 8px 16px;
-  border-radius: 6px;
-  border: 1px solid var(--gray-600);
-  cursor: pointer;
-  font-size: 15px;
-  font-weight: 500;
-  transition: background 0.15s, border-color 0.15s, color 0.15s;
-}
-
-.logout-btn:hover {
-  background: #7f1d1d;
-  border-color: #991b1b;
-  color: #fca5a5;
-}
-
 /* ── Toggle (mobile) ── */
 .toggle-sidebar {
   display: none;
@@ -128,24 +96,6 @@
 
 .nav-item .icon { font-size: 18px; }
 
-.session-info {
-  margin-top: auto;
-  padding: 18px 24px;
-  border-top: 1px solid var(--gray-700);
-  background: var(--gray-900);
-}
-
-.session-info p {
-  font-size: 13px;
-  color: var(--gray-500);
-  margin: 4px 0;
-  line-height: 1.5;
-}
-
-.session-info strong {
-  color: var(--gray-300);
-  font-weight: 600;
-}
 
 /* ── Main content ── */
 .dashboard-content {

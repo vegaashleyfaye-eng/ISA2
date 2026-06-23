@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
-import { LogOut, Menu, X } from 'lucide-react'
+import { Menu, X } from 'lucide-react'
+import { useSearchParams } from 'react-router-dom'
 import SecurityPolicy from '../components/SecurityPolicy'
 import PasswordChecker from '../components/PasswordChecker'
 import ComplianceChecklist from '../components/ComplianceChecklist'
@@ -7,15 +8,26 @@ import SecurityQuiz from '../components/SecurityQuiz'
 import SessionManagement from '../components/SessionManagement'
 import './Dashboard.css'
 
-export default function Dashboard({ user, onLogout, currentPage, setCurrentPage }) {
+const VALID_PAGES = ['policy', 'password', 'checklist', 'quiz', 'sessions']
+
+export default function Dashboard() {
+  const [searchParams, setSearchParams] = useSearchParams()
   const [sidebarOpen, setSidebarOpen] = useState(false)
 
+  const rawPage = searchParams.get('page')
+  const currentPage = VALID_PAGES.includes(rawPage) ? rawPage : 'policy'
+
+  const setCurrentPage = (id) => {
+    setSearchParams({ page: id })
+    setSidebarOpen(false)
+  }
+
   const menuItems = [
-    { id: 'policy', label: 'Security Policy' },
-    { id: 'password', label: 'Password Checker' },
+    { id: 'policy',    label: 'Security Policy' },
+    { id: 'password',  label: 'Password Checker' },
     { id: 'checklist', label: 'Compliance Checklist' },
-    { id: 'quiz', label: 'Security Quiz' },
-    { id: 'sessions', label: 'Session Management' }
+    { id: 'quiz',      label: 'Security Quiz' },
+    { id: 'sessions',  label: 'Session Management' },
   ]
 
   return (
@@ -25,13 +37,6 @@ export default function Dashboard({ user, onLogout, currentPage, setCurrentPage 
           {sidebarOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
         <h1>ISO 27001 Compliance Dashboard</h1>
-        <div className="user-info">
-          <span>{user?.name}</span>
-          <button className="logout-btn" onClick={onLogout}>
-            <LogOut size={18} />
-            Logout
-          </button>
-        </div>
       </header>
 
       <div className="dashboard-container">
@@ -41,28 +46,20 @@ export default function Dashboard({ user, onLogout, currentPage, setCurrentPage 
               <button
                 key={item.id}
                 className={`nav-item ${currentPage === item.id ? 'active' : ''}`}
-                onClick={() => {
-                  setCurrentPage(item.id)
-                  setSidebarOpen(false)
-                }}
+                onClick={() => setCurrentPage(item.id)}
               >
                 <span>{item.label}</span>
               </button>
             ))}
           </nav>
-          <div className="session-info">
-            <p><strong>User:</strong> {user?.email}</p>
-            <p><strong>Login:</strong> {user?.loginTime}</p>
-            <p><strong>MFA:</strong> {user?.mfaEnabled ? '✓ Enabled' : '✗ Disabled'}</p>
-          </div>
         </aside>
 
         <main className="dashboard-content">
-          {currentPage === 'policy' && <SecurityPolicy />}
-          {currentPage === 'password' && <PasswordChecker />}
+          {currentPage === 'policy'    && <SecurityPolicy />}
+          {currentPage === 'password'  && <PasswordChecker />}
           {currentPage === 'checklist' && <ComplianceChecklist />}
-          {currentPage === 'quiz' && <SecurityQuiz />}
-          {currentPage === 'sessions' && <SessionManagement />}
+          {currentPage === 'quiz'      && <SecurityQuiz />}
+          {currentPage === 'sessions'  && <SessionManagement />}
         </main>
       </div>
 

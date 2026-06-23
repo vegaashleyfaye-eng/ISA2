@@ -1,34 +1,16 @@
-import React, { useState } from 'react'
-import Login from './pages/Login'
+import React from 'react'
+import { Routes, Route, Navigate } from 'react-router-dom'
+import LandingPage from './pages/LandingPage'
 import Dashboard from './pages/Dashboard'
 import './App.css'
 
 export default function App() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false)
-  const [user, setUser] = useState(null)
-  const [currentPage, setCurrentPage] = useState('policy')
-
-  const handleLogin = (userData) => {
-    setUser(userData)
-    setIsAuthenticated(true)
-  }
-
-  const handleLogout = () => {
-    setIsAuthenticated(false)
-    setUser(null)
-    setCurrentPage('policy')
-  }
-
-  if (!isAuthenticated) {
-    return <Login onLogin={handleLogin} />
-  }
-
   return (
-    <Dashboard 
-      user={user} 
-      onLogout={handleLogout}
-      currentPage={currentPage}
-      setCurrentPage={setCurrentPage}
-    />
+    <Routes>
+      <Route path="/" element={<LandingPage />} />
+      <Route path="/dashboard" element={<Dashboard />} />
+      {/* Catch-all: redirect unknown paths back to landing */}
+      <Route path="*" element={<Navigate to="/" replace />} />
+    </Routes>
   )
 }
