@@ -138,3 +138,157 @@
 
   .dashboard-content { padding: 16px; }
 }
+
+/* ── Simulation mode label ── */
+.sim-mode-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--gray-400);
+  background: var(--gray-800);
+  border: 1px solid var(--gray-600);
+  border-radius: 999px;
+  padding: 4px 12px;
+}
+
+/* ── Simulation Timer ── */
+.sim-timer {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--gray-800);
+  border: 1px solid var(--gray-600);
+  border-radius: 8px;
+  padding: 8px 14px;
+  flex-shrink: 0;
+}
+
+.sim-timer.warning {
+  border-color: #ef4444;
+  background: rgba(239, 68, 68, 0.15);
+}
+
+.sim-timer-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  color: var(--gray-400);
+}
+
+.sim-timer-count {
+  font-size: 20px;
+  font-weight: 700;
+  color: #fff;
+  font-variant-numeric: tabular-nums;
+  min-width: 52px;
+  text-align: center;
+}
+
+.sim-timer.warning .sim-timer-count {
+  color: #ef4444;
+}
+
+.sim-end-btn {
+  background: var(--gray-700);
+  border: 1px solid var(--gray-600);
+  color: var(--gray-300);
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.15s;
+}
+
+.sim-end-btn:hover {
+  background: #7f1d1d;
+  border-color: #991b1b;
+  color: #fca5a5;
+}
+
+/* ── Simulation End Modal ── */
+.sim-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.sim-modal {
+  background: #fff;
+  border-radius: 12px;
+  padding: 52px 48px;
+  max-width: 480px;
+  width: 100%;
+  text-align: center;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+}
+
+.sim-modal h2 {
+  font-size: 28px;
+  font-weight: 800;
+  color: #111;
+  margin-bottom: 10px;
+}
+
+.sim-modal-sub {
+  font-size: 15px;
+  color: #777;
+  margin-bottom: 36px;
+}
+
+.sim-summary-grid {
+  display: flex;
+  justify-content: center;
+  gap: 32px;
+  background: #f5f5f5;
+  border-radius: 10px;
+  padding: 28px 24px;
+  margin-bottom: 36px;
+}
+
+.sim-summary-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.sim-summary-num {
+  font-size: 32px;
+  font-weight: 700;
+  color: #111;
+  font-variant-numeric: tabular-nums;
+}
+
+.sim-summary-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  color: #999;
+  text-align: center;
+}
+
+.sim-modal-btn {
+  width: 100%;
+  padding: 16px;
+  background: #111;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.15s;
+}
+
+.sim-modal-btn:hover { background: #333; }

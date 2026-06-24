@@ -151,7 +151,7 @@ function shuffle(arr) {
   return [...arr].sort(() => Math.random() - 0.5)
 }
 
-export default function SecurityQuiz() {
+export default function SecurityQuiz({ onScoreUpdate }) {
   const [quizCount, setQuizCount] = useState(null)
   const [questions, setQuestions] = useState([])
   const [currentQuestion, setCurrentQuestion] = useState(0)
@@ -189,6 +189,7 @@ export default function SecurityQuiz() {
       setSelectedAnswer(null)
       setAnswered(false)
     } else {
+      if (onScoreUpdate) onScoreUpdate(Math.round((score / questions.length) * 100))
       setShowResults(true)
     }
   }
