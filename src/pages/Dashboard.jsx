@@ -125,7 +125,7 @@ export default function Dashboard() {
         <button className="toggle-sidebar" onClick={() => setSidebarOpen(!sidebarOpen)}>
           {sidebarOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
-        <h1>ISO 27001 Compliance Dashboard</h1>
+        <h1>ISO 27001 COMPLIANCE DEMO WEBSITE</h1>
 
         {isSimMode && (
           <>

@@ -1,5 +1,5 @@
-/* ── Landing Page ───────────────────────────────────────────────────── */
-*, *::before, *::after { box-sizing: border-box; }
+/* ── Reset ───────────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 .landing {
   min-height: 100vh;
@@ -8,7 +8,7 @@
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 }
 
-/* ── Nav ── */
+/* ── Nav ─────────────────────────────────────────────────────────────── */
 .lp-nav {
   position: sticky;
   top: 0;
@@ -23,15 +23,15 @@
 }
 
 .lp-nav-brand {
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 700;
-  letter-spacing: 1px;
+  letter-spacing: 1.5px;
   text-transform: uppercase;
   color: #111;
 }
 
 .lp-nav-start {
-  padding: 8px 24px;
+  padding: 8px 22px;
   background: #111;
   color: #fff;
   border: none;
@@ -45,46 +45,32 @@
 
 .lp-nav-start:hover { background: #333; }
 
-/* ── Hero ── */
+/* ── Hero — full-width centered ──────────────────────────────────────── */
 .lp-hero {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0;
-  min-height: calc(100vh - 60px);
-  border-bottom: 1px solid #e5e5e5;
-}
-
-.lp-hero-left {
-  padding: 80px 64px;
-  border-right: 1px solid #e5e5e5;
+  padding: 120px 64px 100px;
+  text-align: center;
+  max-width: 860px;
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-}
-
-.lp-hero-right {
-  padding: 80px 64px;
-  background: #f9f9f9;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+  align-items: center;
 }
 
 .lp-eyebrow {
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 700;
-  letter-spacing: 2px;
-  color: #999;
+  letter-spacing: 2.5px;
+  color: #aaa;
   text-transform: uppercase;
-  margin-bottom: 28px;
+  margin-bottom: 32px;
 }
 
 .lp-hero-title {
-  font-size: clamp(40px, 4.5vw, 72px);
+  font-size: clamp(40px, 5vw, 72px);
   font-weight: 800;
-  line-height: 1.05;
+  line-height: 1.06;
   letter-spacing: -2px;
-  margin-bottom: 32px;
+  margin-bottom: 28px;
   color: #111;
 }
 
@@ -94,8 +80,8 @@
   font-size: 17px;
   line-height: 1.8;
   color: #666;
-  margin-bottom: 40px;
-  max-width: 480px;
+  margin-bottom: 44px;
+  max-width: 600px;
 }
 
 .lp-hero-actions {
@@ -105,12 +91,12 @@
 }
 
 .lp-start-btn-hero {
-  padding: 16px 40px;
+  padding: 16px 44px;
   background: #111;
   color: #fff;
   border: none;
   border-radius: 6px;
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 600;
   cursor: pointer;
   font-family: inherit;
@@ -128,27 +114,32 @@
   padding: 0 0 3px;
   cursor: pointer;
   font-family: inherit;
-  transition: color 0.15s;
+  transition: color 0.15s, border-color 0.15s;
 }
 
 .lp-learn-link:hover { color: #111; border-color: #111; }
 
-/* ── Stats in hero right ── */
-.lp-stats-grid {
+/* ── Stats strip — full width below hero ─────────────────────────────── */
+.lp-stats-strip {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1px;
-  background: #e5e5e5;
-  border: 1px solid #e5e5e5;
-  border-radius: 4px;
-  overflow: hidden;
-  margin-bottom: 48px;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+  border-top: 1px solid #e5e5e5;
+  border-bottom: 1px solid #e5e5e5;
+  background: #f9f9f9;
 }
 
 .lp-stat-box {
-  background: #fff;
-  padding: 32px 28px;
+  padding: 40px 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-right: 1px solid #e5e5e5;
+  text-align: center;
 }
+
+.lp-stat-box:last-child { border-right: none; }
 
 .lp-stat-num {
   display: block;
@@ -157,7 +148,7 @@
   color: #111;
   line-height: 1;
   font-variant-numeric: tabular-nums;
-  margin-bottom: 8px;
+  margin-bottom: 10px;
   letter-spacing: -1px;
 }
 
@@ -170,24 +161,19 @@
   color: #aaa;
 }
 
-.lp-hero-note {
-  font-size: 12px;
-  color: #bbb;
-  letter-spacing: 0.3px;
-}
-
-/* ── Full-width section wrapper ── */
+/* ── Section wrapper ─────────────────────────────────────────────────── */
 .lp-section {
   padding: 96px 64px;
   border-bottom: 1px solid #e5e5e5;
 }
+
+.lp-section-alt { background: #fafafa; }
 
 .lp-section-inner {
   max-width: 1200px;
   margin: 0 auto;
 }
 
-/* ── Section labels & titles ── */
 .lp-section-label {
   font-size: 10px;
   font-weight: 700;
@@ -207,31 +193,34 @@
 }
 
 .lp-section-body {
-  font-size: 16px;
+  font-size: 15px;
   line-height: 1.8;
   color: #666;
-  max-width: 600px;
-  margin-bottom: 56px;
+  max-width: 580px;
+  margin-bottom: 52px;
 }
 
-/* ── CIA Triad — 3 columns ── */
+/* ── CIA Triad ───────────────────────────────────────────────────────── */
 .lp-principles {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 1px;
+  gap: 0;
   background: #e5e5e5;
   border: 1px solid #e5e5e5;
-  border-radius: 4px;
+  border-radius: 6px;
   overflow: hidden;
 }
 
 .lp-principle-card {
   background: #fff;
   padding: 36px 32px;
+  border-right: 1px solid #e5e5e5;
 }
 
+.lp-principle-card:last-child { border-right: none; }
+
 .lp-principle-title {
-  font-size: 17px;
+  font-size: 16px;
   font-weight: 700;
   color: #111;
   margin-bottom: 14px;
@@ -241,17 +230,16 @@
   font-size: 14px;
   color: #777;
   line-height: 1.8;
-  margin: 0;
 }
 
-/* ── Threats — 2-column grid ── */
+/* ── Threats ─────────────────────────────────────────────────────────── */
 .lp-threat-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 1px;
+  gap: 0;
   background: #e5e5e5;
   border: 1px solid #e5e5e5;
-  border-radius: 4px;
+  border-radius: 6px;
   overflow: hidden;
 }
 
@@ -260,14 +248,21 @@
   gap: 20px;
   padding: 32px 28px;
   background: #fff;
+  border-right: 1px solid #e5e5e5;
+  border-bottom: 1px solid #e5e5e5;
 }
 
+.lp-threat-item:nth-child(2n) { border-right: none; }
+.lp-threat-item:nth-child(3),
+.lp-threat-item:nth-child(4)  { border-bottom: none; }
+
 .lp-threat-num {
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 700;
   color: #ccc;
-  min-width: 24px;
-  padding-top: 2px;
+  min-width: 22px;
+  padding-top: 3px;
+  flex-shrink: 0;
 }
 
 .lp-threat-title {
@@ -280,15 +275,14 @@
 .lp-threat-desc {
   font-size: 14px;
   color: #777;
-  line-height: 1.7;
-  margin: 0;
+  line-height: 1.75;
 }
 
-/* ── Annex A — 2-column layout ── */
+/* ── Annex A ─────────────────────────────────────────────────────────── */
 .lp-annex-layout {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 64px;
+  gap: 80px;
   align-items: start;
 }
 
@@ -296,7 +290,7 @@
   display: flex;
   flex-direction: column;
   border: 1px solid #e5e5e5;
-  border-radius: 4px;
+  border-radius: 6px;
   overflow: hidden;
 }
 
@@ -307,9 +301,11 @@
   padding: 18px 24px;
   border-bottom: 1px solid #e5e5e5;
   background: #fff;
+  transition: background 0.12s;
 }
 
 .lp-annex-item:last-child { border-bottom: none; }
+.lp-annex-item:hover { background: #f9f9f9; }
 
 .lp-annex-code {
   font-size: 11px;
@@ -317,29 +313,36 @@
   letter-spacing: 0.5px;
   color: #bbb;
   min-width: 52px;
+  font-family: monospace;
 }
 
 .lp-annex-name {
-  font-size: 15px;
+  font-size: 14px;
   color: #333;
   font-weight: 500;
 }
 
-/* ── Modules — 2-column grid ── */
+/* ── Modules ─────────────────────────────────────────────────────────── */
 .lp-modules {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 1px;
+  gap: 0;
   background: #e5e5e5;
   border: 1px solid #e5e5e5;
-  border-radius: 4px;
+  border-radius: 6px;
   overflow: hidden;
 }
 
 .lp-module-card {
-  background: #f7f7f7;
+  background: #fff;
   padding: 36px 32px;
+  border-right: 1px solid #e5e5e5;
+  border-bottom: 1px solid #e5e5e5;
 }
+
+.lp-module-card:nth-child(2n)  { border-right: none; }
+.lp-module-card:nth-child(3),
+.lp-module-card:nth-child(4)   { border-bottom: none; }
 
 .lp-module-num {
   font-size: 10px;
@@ -352,7 +355,7 @@
 }
 
 .lp-module-title {
-  font-size: 18px;
+  font-size: 17px;
   font-weight: 700;
   color: #111;
   margin-bottom: 12px;
@@ -361,48 +364,48 @@
 .lp-module-desc {
   font-size: 14px;
   color: #777;
-  line-height: 1.7;
-  margin: 0;
+  line-height: 1.75;
 }
 
-/* ── CTA ── */
+/* ── CTA ─────────────────────────────────────────────────────────────── */
 .lp-cta {
   padding: 120px 64px;
-  background: #f5f5f5;
+  background: #111;
   text-align: center;
 }
 
 .lp-cta-inner {
-  max-width: 560px;
+  max-width: 520px;
   margin: 0 auto;
+}
+
+.lp-cta-eyebrow {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #555;
+  margin-bottom: 20px;
 }
 
 .lp-cta-title {
   font-size: clamp(36px, 4vw, 60px);
   font-weight: 800;
-  color: #111;
-  margin-bottom: 14px;
-  letter-spacing: -1px;
-}
-
-.lp-cta-meta {
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  color: #aaa;
+  color: #fff;
   margin-bottom: 40px;
+  letter-spacing: -1.5px;
+  line-height: 1.05;
 }
 
 .lp-start-btn {
-  display: inline-block;
+  display: block;
   width: 100%;
-  padding: 20px 40px;
-  background: #111;
-  color: #fff;
+  padding: 18px 40px;
+  background: #fff;
+  color: #111;
   border: none;
   border-radius: 6px;
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 700;
   cursor: pointer;
   font-family: inherit;
@@ -410,24 +413,31 @@
   margin-bottom: 20px;
 }
 
-.lp-start-btn:hover { background: #333; }
+.lp-start-btn:hover { background: #e5e5e5; }
 
 .lp-cta-note {
-  font-size: 13px;
-  color: #aaa;
-  margin: 0;
+  font-size: 12px;
+  color: #555;
 }
 
-/* ── Responsive ── */
+/* ── Responsive ──────────────────────────────────────────────────────── */
 @media (max-width: 900px) {
-  .lp-nav { padding: 0 24px; }
-  .lp-hero { grid-template-columns: 1fr; min-height: auto; }
-  .lp-hero-left { padding: 60px 24px; border-right: none; border-bottom: 1px solid #e5e5e5; }
-  .lp-hero-right { padding: 48px 24px; }
-  .lp-section { padding: 64px 24px; }
-  .lp-principles { grid-template-columns: 1fr; }
-  .lp-threat-grid { grid-template-columns: 1fr; }
-  .lp-annex-layout { grid-template-columns: 1fr; gap: 32px; }
-  .lp-modules { grid-template-columns: 1fr; }
-  .lp-cta { padding: 80px 24px; }
+  .lp-nav            { padding: 0 24px; }
+  .lp-hero           { padding: 72px 24px 64px; }
+  .lp-stats-strip    { grid-template-columns: repeat(2, 1fr); }
+  .lp-stat-box:nth-child(2) { border-right: none; }
+  .lp-stat-box:nth-child(3),
+  .lp-stat-box:nth-child(4) { border-top: 1px solid #e5e5e5; }
+  .lp-section        { padding: 64px 24px; }
+  .lp-principles     { grid-template-columns: 1fr; }
+  .lp-principle-card { border-right: none; border-bottom: 1px solid #e5e5e5; }
+  .lp-principle-card:last-child { border-bottom: none; }
+  .lp-threat-grid    { grid-template-columns: 1fr; }
+  .lp-threat-item    { border-right: none; }
+  .lp-threat-item:nth-child(3) { border-bottom: 1px solid #e5e5e5; }
+  .lp-annex-layout   { grid-template-columns: 1fr; gap: 32px; }
+  .lp-modules        { grid-template-columns: 1fr; }
+  .lp-module-card    { border-right: none; }
+  .lp-module-card:nth-child(3) { border-bottom: 1px solid #e5e5e5; }
+  .lp-cta            { padding: 80px 24px; }
 }

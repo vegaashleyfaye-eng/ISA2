@@ -16,7 +16,7 @@ const MODULES = [
   {
     num: '03',
     title: 'Policy Compliance Viewer',
-    desc: 'Review the security policy controls required under ISO 27001. Understand each control\'s function and applicability.'
+    desc: "Review the security policy controls required under ISO 27001. Understand each control's function and applicability."
   },
   {
     num: '04',
@@ -52,13 +52,20 @@ const THREATS = [
   {
     num: '04',
     title: 'Unauthorized Access',
-    desc: 'Access beyond an individual\'s authorization scope. Multi-factor authentication and role-based access controls are mandatory requirements for privileged systems.'
+    desc: "Access beyond an individual's authorization scope. Multi-factor authentication and role-based access controls are mandatory requirements for privileged systems."
   }
+]
+
+const STATS = [
+  { num: '27001', label: 'ISO Standard' },
+  { num: '93',    label: 'Annex A Controls' },
+  { num: '20 min',label: 'Session Length' },
+  { num: '4',     label: 'Modules' },
 ]
 
 export default function LandingPage() {
   const navigate = useNavigate()
-  const ctaRef = useRef(null)
+  const ctaRef   = useRef(null)
 
   const handleStart = () => navigate('/simulate')
 
@@ -71,50 +78,38 @@ export default function LandingPage() {
         <button className="lp-nav-start" onClick={handleStart}>Start Simulation</button>
       </nav>
 
-      {/* ── Hero — two columns ── */}
+      {/* ── Hero — centered ── */}
       <section className="lp-hero">
-        <div className="lp-hero-left">
-          <p className="lp-eyebrow">Information Security Simulation / ISO 27001:2022</p>
-          <h1 className="lp-hero-title">
-            Security is not<br />
-            <span className="lp-muted">a feature.</span><br />
-            It is a foundation.
-          </h1>
-          <p className="lp-hero-body">
-            ISO 27001 sets the global standard for information security management.
-            This simulation puts five of its core controls in your hands so you understand
-            not just what each requirement says, but why it exists.
-          </p>
-          <div className="lp-hero-actions">
-            <button className="lp-start-btn-hero" onClick={handleStart}>Start Simulation</button>
-            <button className="lp-learn-link" onClick={() => ctaRef.current?.scrollIntoView({ behavior: 'smooth' })}>
-              Learn more first
-            </button>
-          </div>
-        </div>
-
-        <div className="lp-hero-right">
-          <div className="lp-stats-grid">
-            <div className="lp-stat-box">
-              <span className="lp-stat-num">27001</span>
-              <span className="lp-stat-label">ISO Standard</span>
-            </div>
-            <div className="lp-stat-box">
-              <span className="lp-stat-num">93</span>
-              <span className="lp-stat-label">Annex A Controls</span>
-            </div>
-            <div className="lp-stat-box">
-              <span className="lp-stat-num">20 min</span>
-              <span className="lp-stat-label">Session Length</span>
-            </div>
-            <div className="lp-stat-box">
-              <span className="lp-stat-num">4</span>
-              <span className="lp-stat-label">Modules</span>
-            </div>
-          </div>
-          <p className="lp-hero-note">No account required. Session expires automatically after 20 minutes.</p>
+        <p className="lp-eyebrow">Information Security Simulation / ISO 27001:2022</p>
+        <h1 className="lp-hero-title">
+          Security is not a feature.<br />
+          <span className="lp-muted">It is a foundation.</span>
+        </h1>
+        <p className="lp-hero-body">
+          ISO 27001 sets the global standard for information security management.
+          This simulation puts five of its core controls in your hands — so you understand
+          not just what each requirement says, but why it exists.
+        </p>
+        <div className="lp-hero-actions">
+          <button className="lp-start-btn-hero" onClick={handleStart}>Start Simulation</button>
+          <button
+            className="lp-learn-link"
+            onClick={() => ctaRef.current?.scrollIntoView({ behavior: 'smooth' })}
+          >
+            Learn more first
+          </button>
         </div>
       </section>
+
+      {/* ── Stats strip ── */}
+      <div className="lp-stats-strip">
+        {STATS.map(s => (
+          <div key={s.label} className="lp-stat-box">
+            <span className="lp-stat-num">{s.num}</span>
+            <span className="lp-stat-label">{s.label}</span>
+          </div>
+        ))}
+      </div>
 
       {/* ── CIA Triad ── */}
       <section className="lp-section">
@@ -143,7 +138,7 @@ export default function LandingPage() {
       </section>
 
       {/* ── Threat Landscape ── */}
-      <section className="lp-section">
+      <section className="lp-section lp-section-alt">
         <div className="lp-section-inner">
           <p className="lp-section-label">Threat Landscape</p>
           <h2 className="lp-section-title">What the standard<br />is designed to counter.</h2>
@@ -191,7 +186,7 @@ export default function LandingPage() {
       </section>
 
       {/* ── Modules ── */}
-      <section className="lp-section">
+      <section className="lp-section lp-section-alt">
         <div className="lp-section-inner">
           <p className="lp-section-label">Simulation Modules</p>
           <h2 className="lp-section-title">Four modules.<br />One session. Twenty minutes.</h2>
@@ -214,8 +209,8 @@ export default function LandingPage() {
       {/* ── CTA ── */}
       <section className="lp-cta" ref={ctaRef}>
         <div className="lp-cta-inner">
+          <p className="lp-cta-eyebrow">20-Minute Session / 4 Modules / ISO 27001:2022</p>
           <h2 className="lp-cta-title">Ready to begin?</h2>
-          <p className="lp-cta-meta">20-Minute Session / 4 Modules / ISO 27001:2022</p>
           <button className="lp-start-btn" onClick={handleStart}>Start Simulation</button>
           <p className="lp-cta-note">No account required. Session expires automatically after 20 minutes.</p>
         </div>

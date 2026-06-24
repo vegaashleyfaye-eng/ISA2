@@ -1,120 +1,322 @@
-import React, { useState } from 'react'
-import { Eye, EyeOff } from 'lucide-react'
+import React, { useState, useRef, useEffect } from 'react'
+import { Eye, EyeOff, RefreshCw, Shield, Mail, CheckCircle } from 'lucide-react'
 import './PasswordChecker.css'
 
+const WEAK_PASSWORDS = [
+  'password','password123','123456','12345678','qwerty','admin',
+  'letmein','welcome','monkey','dragon','master','abc123',
+  'iloveyou','sunshine','princess','shadow','trustno1','superman'
+]
+
+const CHECKS = [
+  { id: 'len',    icon: '≡',   label: 'Password must contain at least 12 characters',        test: p => p.length >= 12 },
+  { id: 'upper',  icon: 'Aa',  label: 'Password must include at least 1 uppercase letter',    test: p => /[A-Z]/.test(p) },
+  { id: 'lower',  icon: 'a',   label: 'Password must include at least 1 lowercase letter',    test: p => /[a-z]/.test(p) },
+  { id: 'num',    icon: '123', label: 'Password must include at least 1 number',              test: p => /[0-9]/.test(p) },
+  { id: 'sym',    icon: '!@#', label: 'Password must include at least 1 symbol',              test: p => /[^A-Za-z0-9]/.test(p) },
+  { id: 'space',  icon: '⊘',   label: 'Password must not contain spaces',                    test: p => p.length > 0 && !/\s/.test(p) },
+  { id: 'common', icon: '🛡',  label: 'Password must not be a common or weak password',      test: p => p.length > 0 && !WEAK_PASSWORDS.includes(p.toLowerCase()) },
+]
+
+function getStrength(passed, total) {
+  if (passed === 0) return { label: 'Not Rated', bars: 0 }
+  if (passed <= 2)  return { label: 'Too Weak',  bars: 1 }
+  if (passed <= 4)  return { label: 'Weak',      bars: 2 }
+  if (passed <= 6)  return { label: 'Strong',    bars: 3 }
+  return               { label: 'Very Strong', bars: 4 }
+}
+
+function generateStrongPassword() {
+  const U = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+  const L = 'abcdefghijklmnopqrstuvwxyz'
+  const N = '0123456789'
+  const S = '!@#$%^&*()_+[]'
+  let pw = U[~~(Math.random()*U.length)] + U[~~(Math.random()*U.length)]
+         + L[~~(Math.random()*L.length)] + L[~~(Math.random()*L.length)]
+         + N[~~(Math.random()*N.length)] + N[~~(Math.random()*N.length)]
+         + S[~~(Math.random()*S.length)] + S[~~(Math.random()*S.length)]
+  const all = U + L + N + S
+  while (pw.length < 16) pw += all[~~(Math.random()*all.length)]
+  return pw.split('').sort(() => Math.random() - .5).join('')
+}
+
 export default function PasswordChecker() {
-  const [password, setPassword] = useState('')
-  const [showPassword, setShowPassword] = useState(false)
+  const [password, setPassword]       = useState('')
+  const [showPw, setShowPw]           = useState(false)
+  const [email, setEmail]             = useState('')
+  const [emailSubmitted, setEmailSubmitted] = useState(false)
+  const [otpSent, setOtpSent]         = useState(false)
+  const [otpCode, setOtpCode]         = useState('')
+  const [otpDigits, setOtpDigits]     = useState(['','','','','',''])
+  const [otpVerified, setOtpVerified] = useState(false)
+  const [otpError, setOtpError]       = useState('')
+  const [otpCooldown, setOtpCooldown] = useState(0)
+  const cooldownRef = useRef(null)
+  const digitRefs   = useRef([])
 
-  const checks = [
-    { label: 'Password must contain at least 8 characters', icon: '≡', test: (pwd) => pwd.length >= 8 },
-    { label: 'Password must include at least 1 uppercase letter', icon: 'Aa', test: (pwd) => /[A-Z]/.test(pwd) },
-    { label: 'Password must include at least 1 lowercase letter', icon: 'a', test: (pwd) => /[a-z]/.test(pwd) },
-    { label: 'Password must include at least 1 number', icon: '123', test: (pwd) => /[0-9]/.test(pwd) },
-    { label: 'Password must include at least 1 symbol', icon: '!@#', test: (pwd) => /[!@#$%^&*]/.test(pwd) },
-    { label: 'Password must not contain spaces', icon: '✓', test: (pwd) => !/\s/.test(pwd) },
-    { label: 'Password must not be a common or weak password', icon: '🛡️', test: (pwd) => {
-      const common = ['123', '456', 'abc', 'password', 'qwerty', 'admin']
-      return !common.some(pattern => pwd.toLowerCase().includes(pattern))
-    }}
-  ]
+  const results   = CHECKS.map(c => ({ ...c, passed: c.test(password) }))
+  const passed    = results.filter(r => r.passed).length
+  const allPassed = passed === CHECKS.length
+  const strength  = getStrength(passed, CHECKS.length)
 
-  const results = checks.map(check => ({
-    ...check,
-    passed: check.test(password)
-  }))
-
-  const allPassed = results.every(r => r.passed)
-  const passedCount = results.filter(r => r.passed).length
-
-  const getStrength = () => {
-    if (passedCount === 0) return { level: 'None', rating: 'Not Rated' }
-    if (passedCount <= 2) return { level: 'Weak', rating: 'Too Weak' }
-    if (passedCount <= 4) return { level: 'Good', rating: 'Good' }
-    if (passedCount <= 6) return { level: 'Strong', rating: 'Strong' }
-    return { level: 'Very Strong', rating: 'Very Strong' }
+  const sendOTP = () => {
+    if (!email.includes('@') || !email.includes('.')) return
+    const code = Math.floor(100000 + Math.random() * 900000).toString()
+    setOtpCode(code)
+    setOtpSent(true)
+    setOtpError('')
+    setOtpDigits(['','','','','',''])
+    setOtpCooldown(30)
+    clearInterval(cooldownRef.current)
+    cooldownRef.current = setInterval(() => {
+      setOtpCooldown(prev => {
+        if (prev <= 1) { clearInterval(cooldownRef.current); return 0 }
+        return prev - 1
+      })
+    }, 1000)
+    setTimeout(() => digitRefs.current[0]?.focus(), 100)
   }
 
-  const strength = getStrength()
+  const handleDigitChange = (idx, val) => {
+    if (!/^[0-9]?$/.test(val)) return
+    const next = [...otpDigits]
+    next[idx] = val
+    setOtpDigits(next)
+    setOtpError('')
+    if (val && idx < 5) digitRefs.current[idx + 1]?.focus()
+  }
 
-  const generatePassword = () => {
-    const upper = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
-    const lower = 'abcdefghijklmnopqrstuvwxyz'
-    const numbers = '0123456789'
-    const symbols = '!@#$%^&*'
-    
-    let generated = ''
-    generated += upper[Math.floor(Math.random() * upper.length)]
-    generated += lower[Math.floor(Math.random() * lower.length)]
-    generated += numbers[Math.floor(Math.random() * numbers.length)]
-    generated += symbols[Math.floor(Math.random() * symbols.length)]
-    
-    const all = upper + lower + numbers + symbols
-    for (let i = generated.length; i < 12; i++) {
-      generated += all[Math.floor(Math.random() * all.length)]
+  const handleDigitKeyDown = (idx, e) => {
+    if (e.key === 'Backspace' && !otpDigits[idx] && idx > 0) {
+      digitRefs.current[idx - 1]?.focus()
     }
-    
-    setPassword(generated.split('').sort(() => Math.random() - 0.5).join(''))
   }
+
+  const verifyOTP = () => {
+    const entered = otpDigits.join('')
+    if (entered === otpCode) {
+      setOtpVerified(true)
+      setOtpError('')
+    } else {
+      setOtpError('Incorrect code. Please check the code displayed above and try again.')
+      setOtpDigits(['','','','','',''])
+      digitRefs.current[0]?.focus()
+    }
+  }
+
+  useEffect(() => () => clearInterval(cooldownRef.current), [])
 
   return (
-    <div className="password-checker">
-      <div className="checker-header">
-        <h2>Password Policy Checker</h2>
-        <p>Enter a password below to check if it meets the security policy guidelines.</p>
-      </div>
+    <div className="pc-root">
 
-      <div className="checker-card">
-        <div className="input-section">
-          <label>Password Input</label>
-          <div className="password-input-wrapper">
+      {/* ── LEFT: Procedure Panel ── */}
+      <aside className="pc-sidebar">
+        <div className="pc-sidebar-brand">
+          <Shield size={22} />
+          <div>
+            <div className="pc-sidebar-title">ISO 27001 Compliance</div>
+            <div className="pc-sidebar-sub">Password Policy — Annex A.5.17</div>
+          </div>
+        </div>
+
+        <div className="pc-sidebar-section">
+          <div className="pc-sidebar-heading">What You'll Practice</div>
+          <ul className="pc-sidebar-list">
+            <li><span className="pc-list-icon"><Shield size={14}/></span> Create a strong, policy-compliant password</li>
+            <li><span className="pc-list-icon"><Mail size={14}/></span> Verify your identity with MFA</li>
+            <li><span className="pc-list-icon"><CheckCircle size={14}/></span> Understand why each rule exists</li>
+          </ul>
+        </div>
+
+        <div className="pc-sidebar-divider" />
+
+        <div className="pc-sidebar-section">
+          <div className="pc-sidebar-heading">Why It Matters</div>
+          <p className="pc-sidebar-body">
+            Strong passwords and MFA are the first line of defense against
+            unauthorized access. ISO 27001 Annex A.5.17 mandates that organizations
+            enforce authentication information policies to protect information assets.
+          </p>
+        </div>
+
+        <div className="pc-sidebar-divider" />
+
+        <div className="pc-sidebar-section">
+          <div className="pc-sidebar-heading">Procedure Steps</div>
+          <div className="pc-steps">
+            <div className={`pc-step ${password.length > 0 ? 'done' : 'active'}`}>
+              <div className="pc-step-num">1</div>
+              <div className="pc-step-text">Enter or generate a password that passes all 7 policy requirements</div>
+            </div>
+            <div className={`pc-step ${allPassed && !otpVerified ? 'active' : allPassed && otpVerified ? 'done' : ''}`}>
+              <div className="pc-step-num">2</div>
+              <div className="pc-step-text">Enter your email address to receive an MFA verification code</div>
+            </div>
+            <div className={`pc-step ${otpVerified ? 'done' : ''}`}>
+              <div className="pc-step-num">3</div>
+              <div className="pc-step-text">Enter the 6-digit OTP to confirm your identity and complete the exercise</div>
+            </div>
+          </div>
+        </div>
+
+        <div className="pc-sidebar-divider" />
+
+        <div className="pc-tips-box">
+          <div className="pc-tips-title">Tips</div>
+          <p>Use a mix of uppercase, lowercase, numbers, and symbols. Avoid personal information or common words. Use the generator if you need a compliant password immediately.</p>
+        </div>
+      </aside>
+
+      {/* ── RIGHT: Interactive Checker ── */}
+      <main className="pc-main">
+        <div className="pc-main-header">
+          <h2>Password Policy Checker</h2>
+          <p>Enter a password below to check if it meets the security policy guidelines.</p>
+        </div>
+
+        {/* Password Input */}
+        <div className="pc-field-group">
+          <label className="pc-label">Password Input</label>
+          <div className="pc-input-wrap">
             <input
-              type={showPassword ? 'text' : 'password'}
+              type={showPw ? 'text' : 'password'}
+              className="pc-input"
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={e => setPassword(e.target.value)}
               placeholder="Enter your password"
+              autoComplete="new-password"
+              disabled={otpVerified}
             />
-            <button
-              type="button"
-              className="eye-btn"
-              onClick={() => setShowPassword(!showPassword)}
-            >
-              {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+            <button className="pc-eye-btn" onClick={() => setShowPw(p => !p)} type="button">
+              {showPw ? <EyeOff size={18}/> : <Eye size={18}/>}
             </button>
           </div>
         </div>
 
-        <div className="policy-section">
-          <h3>Policy Guidelines</h3>
-          <div className="guidelines-list">
-            {results.map((result, idx) => (
-              <div key={idx} className={`guideline ${result.passed ? 'passed' : 'failed'}`}>
-                <div className="guideline-icon">{result.icon}</div>
-                <span className="guideline-text">{result.label}</span>
-                <div className={`guideline-circle ${result.passed ? 'filled' : 'empty'}`}>
-                  {result.passed ? '✓' : ''}
-                </div>
+        {/* Policy Guidelines */}
+        <div className="pc-field-group">
+          <label className="pc-label">Policy Guidelines</label>
+          <div className="pc-guidelines">
+            {results.map((r, i) => (
+              <div key={i} className={`pc-gl-row ${r.passed ? 'passed' : ''}`}>
+                <span className="pc-gl-icon">{r.icon}</span>
+                <span className="pc-gl-text">{r.label}</span>
+                <span className={`pc-gl-circle ${r.passed ? 'checked' : ''}`}>
+                  {r.passed ? '✓' : ''}
+                </span>
               </div>
             ))}
           </div>
         </div>
 
-        <div className="strength-section">
-          <h3>Password Strength Rating</h3>
-          <div className="strength-box">
-            <div className="strength-badge">🛡️ Rating: <strong>{strength.rating}</strong></div>
-            <div className={`strength-bars ${strength.rating === 'Too Weak' ? 'too-weak' : strength.rating === 'Good' ? 'good' : strength.rating === 'Strong' ? 'strong' : strength.rating === 'Very Strong' ? 'very-strong' : ''}`}>
-              {[1, 2, 3, 4].map(i => (
-                <div key={i} className={`bar ${i <= Math.ceil((passedCount / results.length) * 4) ? 'filled' : ''}`}></div>
+        {/* Strength Rating */}
+        <div className="pc-field-group">
+          <label className="pc-label">Password Strength Rating</label>
+          <div className="pc-strength-box">
+            <div className="pc-strength-left">
+              <Shield size={18} className="pc-shield-icon" />
+              <span>Rating: <strong>{strength.label}</strong></span>
+            </div>
+            <div className="pc-strength-bars">
+              {[1,2,3,4].map(i => (
+                <div key={i} className={`pc-bar ${i <= strength.bars ? `lit-${strength.bars}` : ''}`} />
               ))}
             </div>
           </div>
         </div>
 
-        <button className="btn-generate" onClick={generatePassword}>
-          🔄 Generate Strong Password
-        </button>
-      </div>
+        {/* Generate Button */}
+        {!otpVerified && (
+          <button className="pc-btn-generate" onClick={() => setPassword(generateStrongPassword())}>
+            <RefreshCw size={16} /> Generate Strong Password
+          </button>
+        )}
+
+        {/* ── EMAIL + OTP SECTION (only shows when all checks pass) ── */}
+        {allPassed && !otpVerified && (
+          <div className="pc-mfa-section">
+            <div className="pc-mfa-header">
+              <Mail size={18} />
+              <div>
+                <div className="pc-mfa-title">Multi-Factor Authentication — Annex A.8.5</div>
+                <div className="pc-mfa-sub">All password requirements met. Verify your identity to complete this module.</div>
+              </div>
+            </div>
+
+            {!otpSent ? (
+              <div className="pc-email-row">
+                <input
+                  type="email"
+                  className="pc-input"
+                  placeholder="Enter your email address"
+                  value={email}
+                  onChange={e => setEmail(e.target.value)}
+                  onKeyDown={e => e.key === 'Enter' && sendOTP()}
+                />
+                <button
+                  className="pc-btn-send"
+                  onClick={sendOTP}
+                  disabled={!email.includes('@')}
+                >
+                  Send OTP
+                </button>
+              </div>
+            ) : (
+              <div className="pc-otp-block">
+                <div className="pc-otp-info">
+                  Code sent to <strong>{email}</strong>.
+                  <span className="pc-otp-demo"> (Demo code: <strong>{otpCode}</strong>)</span>
+                </div>
+
+                <div className="pc-otp-digits">
+                  {otpDigits.map((d, i) => (
+                    <input
+                      key={i}
+                      ref={el => digitRefs.current[i] = el}
+                      type="text"
+                      inputMode="numeric"
+                      maxLength={1}
+                      className="pc-otp-digit"
+                      value={d}
+                      onChange={e => handleDigitChange(i, e.target.value)}
+                      onKeyDown={e => handleDigitKeyDown(i, e)}
+                    />
+                  ))}
+                </div>
+
+                {otpError && <div className="pc-otp-error">{otpError}</div>}
+
+                <div className="pc-otp-actions">
+                  <button className="pc-btn-verify" onClick={verifyOTP} disabled={otpDigits.join('').length < 6}>
+                    Verify Code
+                  </button>
+                  <button
+                    className="pc-btn-resend"
+                    onClick={sendOTP}
+                    disabled={otpCooldown > 0}
+                  >
+                    {otpCooldown > 0 ? `Resend in ${otpCooldown}s` : 'Resend Code'}
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* ── VERIFIED STATE ── */}
+        {otpVerified && (
+          <div className="pc-verified-banner">
+            <CheckCircle size={22} />
+            <div>
+              <div className="pc-verified-title">Identity Verified</div>
+              <div className="pc-verified-body">
+                Your password meets all ISO 27001 Annex A.5.17 requirements and your identity has been
+                confirmed via a second factor (Annex A.8.5). This module is complete.
+              </div>
+            </div>
+          </div>
+        )}
+      </main>
     </div>
   )
 }
