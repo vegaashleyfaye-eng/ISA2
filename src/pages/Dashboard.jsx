@@ -77,11 +77,11 @@ export default function Dashboard() {
   }
 
   const menuItems = [
-    { id: 'policy',    label: 'Security Policy' },
-    { id: 'password',  label: 'Password Checker' },
-    { id: 'checklist', label: 'Compliance Checklist' },
-    { id: 'quiz',      label: 'Security Quiz' },
-    { id: 'sessions',  label: 'Session Management' },
+    { id: 'policy',    label: '01 — Security Policy' },
+    { id: 'password',  label: '02 — Password Checker' },
+    { id: 'quiz',      label: '03 — Security Quiz' },
+    { id: 'checklist', label: '04 — Compliance Checklist' },
+    { id: 'sessions',  label: '05 — Session Management' },
   ]
 
   const timerWarning = isSimMode && timeLeft <= 60

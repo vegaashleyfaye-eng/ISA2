@@ -1,5 +1,5 @@
-import React, { useState, useRef, useEffect } from 'react'
-import { Eye, EyeOff, RefreshCw, Shield, Mail, CheckCircle } from 'lucide-react'
+import React, { useState } from 'react'
+import { Eye, EyeOff, RefreshCw, Shield } from 'lucide-react'
 import './PasswordChecker.css'
 
 const WEAK_PASSWORDS = [
@@ -41,99 +41,13 @@ function generateStrongPassword() {
 }
 
 export default function PasswordChecker() {
-  const [password, setPassword]       = useState('')
-  const [showPw, setShowPw]           = useState(false)
-  const [email, setEmail]             = useState('')
-  const [emailSubmitted, setEmailSubmitted] = useState(false)
-  const [otpSent, setOtpSent]         = useState(false)
-  const [otpDigits, setOtpDigits]     = useState(['','','','','',''])
-  const [otpVerified, setOtpVerified] = useState(false)
-  const [otpError, setOtpError]       = useState('')
-  const [otpCooldown, setOtpCooldown] = useState(0)
-  const cooldownRef = useRef(null)
-  const digitRefs   = useRef([])
+  const [password, setPassword] = useState('')
+  const [showPw, setShowPw]     = useState(false)
 
   const results   = CHECKS.map(c => ({ ...c, passed: c.test(password) }))
   const passed    = results.filter(r => r.passed).length
   const allPassed = passed === CHECKS.length
   const strength  = getStrength(passed, CHECKS.length)
-
-  const [otpLoading, setOtpLoading] = useState(false)
-
-  const sendOTP = async () => {
-    if (!email.includes('@') || !email.includes('.')) return
-    setOtpLoading(true)
-    setOtpError('')
-    try {
-      const res = await fetch('http://localhost:3001/api/send-otp', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email }),
-      })
-      const data = await res.json()
-      if (!res.ok) {
-        setOtpError(data.error || 'Failed to send OTP. Please try again.')
-        setOtpLoading(false)
-        return
-      }
-      setOtpSent(true)
-      setOtpError('')
-      setOtpDigits(['','','','','',''])
-      setOtpCooldown(30)
-      clearInterval(cooldownRef.current)
-      cooldownRef.current = setInterval(() => {
-        setOtpCooldown(prev => {
-          if (prev <= 1) { clearInterval(cooldownRef.current); return 0 }
-          return prev - 1
-        })
-      }, 1000)
-      setTimeout(() => digitRefs.current[0]?.focus(), 100)
-    } catch {
-      setOtpError('Could not reach the server. Make sure the backend is running.')
-    }
-    setOtpLoading(false)
-  }
-
-  const handleDigitChange = (idx, val) => {
-    if (!/^[0-9]?$/.test(val)) return
-    const next = [...otpDigits]
-    next[idx] = val
-    setOtpDigits(next)
-    setOtpError('')
-    if (val && idx < 5) digitRefs.current[idx + 1]?.focus()
-  }
-
-  const handleDigitKeyDown = (idx, e) => {
-    if (e.key === 'Backspace' && !otpDigits[idx] && idx > 0) {
-      digitRefs.current[idx - 1]?.focus()
-    }
-  }
-
-  const verifyOTP = async () => {
-    const entered = otpDigits.join('')
-    setOtpLoading(true)
-    try {
-      const res = await fetch('http://localhost:3001/api/verify-otp', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, code: entered }),
-      })
-      const data = await res.json()
-      if (!res.ok) {
-        setOtpError(data.error || 'Incorrect code. Please try again.')
-        setOtpDigits(['','','','','',''])
-        digitRefs.current[0]?.focus()
-      } else {
-        setOtpVerified(true)
-        setOtpError('')
-      }
-    } catch {
-      setOtpError('Could not reach the server. Make sure the backend is running.')
-    }
-    setOtpLoading(false)
-  }
-
-  useEffect(() => () => clearInterval(cooldownRef.current), [])
 
   return (
     <div className="pc-root">
@@ -152,8 +66,8 @@ export default function PasswordChecker() {
           <div className="pc-sidebar-heading">What You'll Practice</div>
           <ul className="pc-sidebar-list">
             <li><span className="pc-list-icon"><Shield size={14}/></span> Create a strong, policy-compliant password</li>
-            <li><span className="pc-list-icon"><Mail size={14}/></span> Verify your identity with MFA</li>
-            <li><span className="pc-list-icon"><CheckCircle size={14}/></span> Understand why each rule exists</li>
+            <li><span className="pc-list-icon"><Shield size={14}/></span> Understand each password rule and why it exists</li>
+            <li><span className="pc-list-icon"><Shield size={14}/></span> Recognize weak vs. strong password patterns</li>
           </ul>
         </div>
 
@@ -162,30 +76,22 @@ export default function PasswordChecker() {
         <div className="pc-sidebar-section">
           <div className="pc-sidebar-heading">Why It Matters</div>
           <p className="pc-sidebar-body">
-            Strong passwords and MFA are the first line of defense against
-            unauthorized access. ISO 27001 Annex A.5.17 mandates that organizations
-            enforce authentication information policies to protect information assets.
+            Strong passwords are the first line of defense against unauthorized access.
+            ISO 27001 Annex A.5.17 mandates that organizations enforce authentication
+            information policies to protect information assets.
           </p>
         </div>
 
         <div className="pc-sidebar-divider" />
 
         <div className="pc-sidebar-section">
-          <div className="pc-sidebar-heading">Procedure Steps</div>
-          <div className="pc-steps">
-            <div className={`pc-step ${password.length > 0 ? 'done' : 'active'}`}>
-              <div className="pc-step-num">1</div>
-              <div className="pc-step-text">Enter or generate a password that passes all 7 policy requirements</div>
-            </div>
-            <div className={`pc-step ${allPassed && !otpVerified ? 'active' : allPassed && otpVerified ? 'done' : ''}`}>
-              <div className="pc-step-num">2</div>
-              <div className="pc-step-text">Enter your email address to receive an MFA verification code</div>
-            </div>
-            <div className={`pc-step ${otpVerified ? 'done' : ''}`}>
-              <div className="pc-step-num">3</div>
-              <div className="pc-step-text">Enter the 6-digit OTP to confirm your identity and complete the exercise</div>
-            </div>
-          </div>
+          <div className="pc-sidebar-heading">ISO 27001 Reference</div>
+          <p className="pc-sidebar-body">
+            <strong>Annex A.5.17</strong> — Authentication Information<br /><br />
+            Organizations shall control allocation of authentication information.
+            Passwords must meet complexity, length, and uniqueness requirements
+            to reduce the risk of unauthorized access.
+          </p>
         </div>
 
         <div className="pc-sidebar-divider" />
@@ -200,7 +106,7 @@ export default function PasswordChecker() {
       <main className="pc-main">
         <div className="pc-main-header">
           <h2>Password Policy Checker</h2>
-          <p>Enter a password below to check if it meets the security policy guidelines.</p>
+          <p>Enter a password below to check if it meets ISO 27001 Annex A.5.17 security policy guidelines.</p>
         </div>
 
         {/* Password Input */}
@@ -214,7 +120,6 @@ export default function PasswordChecker() {
               onChange={e => setPassword(e.target.value)}
               placeholder="Enter your password"
               autoComplete="new-password"
-              disabled={otpVerified}
             />
             <button className="pc-eye-btn" onClick={() => setShowPw(p => !p)} type="button">
               {showPw ? <EyeOff size={18}/> : <Eye size={18}/>}
@@ -255,91 +160,19 @@ export default function PasswordChecker() {
         </div>
 
         {/* Generate Button */}
-        {!otpVerified && (
-          <button className="pc-btn-generate" onClick={() => setPassword(generateStrongPassword())}>
-            <RefreshCw size={16} /> Generate Strong Password
-          </button>
-        )}
+        <button className="pc-btn-generate" onClick={() => setPassword(generateStrongPassword())}>
+          <RefreshCw size={16} /> Generate Strong Password
+        </button>
 
-        {/* ── EMAIL + OTP SECTION (only shows when all checks pass) ── */}
-        {allPassed && !otpVerified && (
-          <div className="pc-mfa-section">
-            <div className="pc-mfa-header">
-              <Mail size={18} />
-              <div>
-                <div className="pc-mfa-title">Multi-Factor Authentication — Annex A.8.5</div>
-                <div className="pc-mfa-sub">All password requirements met. Verify your identity to complete this module.</div>
-              </div>
-            </div>
-
-            {!otpSent ? (
-              <div className="pc-email-row">
-                <input
-                  type="email"
-                  className="pc-input"
-                  placeholder="Enter your email address"
-                  value={email}
-                  onChange={e => setEmail(e.target.value)}
-                  onKeyDown={e => e.key === 'Enter' && sendOTP()}
-                />
-                <button
-                  className="pc-btn-send"
-                  onClick={sendOTP}
-                  disabled={!email.includes('@') || otpLoading}
-                >
-                  {otpLoading ? 'Sending…' : 'Send OTP'}
-                </button>
-              </div>
-            ) : (
-              <div className="pc-otp-block">
-                <div className="pc-otp-info">
-                  Code sent to <strong>{email}</strong>. Check your inbox.
-                </div>
-
-                <div className="pc-otp-digits">
-                  {otpDigits.map((d, i) => (
-                    <input
-                      key={i}
-                      ref={el => digitRefs.current[i] = el}
-                      type="text"
-                      inputMode="numeric"
-                      maxLength={1}
-                      className="pc-otp-digit"
-                      value={d}
-                      onChange={e => handleDigitChange(i, e.target.value)}
-                      onKeyDown={e => handleDigitKeyDown(i, e)}
-                    />
-                  ))}
-                </div>
-
-                {otpError && <div className="pc-otp-error">{otpError}</div>}
-
-                <div className="pc-otp-actions">
-                  <button className="pc-btn-verify" onClick={verifyOTP} disabled={otpDigits.join('').length < 6 || otpLoading}>
-                    {otpLoading ? 'Verifying…' : 'Verify Code'}
-                  </button>
-                  <button
-                    className="pc-btn-resend"
-                    onClick={sendOTP}
-                    disabled={otpCooldown > 0}
-                  >
-                    {otpCooldown > 0 ? `Resend in ${otpCooldown}s` : 'Resend Code'}
-                  </button>
-                </div>
-              </div>
-            )}
-          </div>
-        )}
-
-        {/* ── VERIFIED STATE ── */}
-        {otpVerified && (
+        {/* All passed banner */}
+        {allPassed && (
           <div className="pc-verified-banner">
-            <CheckCircle size={22} />
+            <Shield size={22} />
             <div>
-              <div className="pc-verified-title">Identity Verified</div>
+              <div className="pc-verified-title">Password is Policy-Compliant</div>
               <div className="pc-verified-body">
-                Your password meets all ISO 27001 Annex A.5.17 requirements and your identity has been
-                confirmed via a second factor (Annex A.8.5). This module is complete.
+                Your password meets all ISO 27001 Annex A.5.17 requirements. This is the standard
+                organizations must enforce to protect information assets from unauthorized access.
               </div>
             </div>
           </div>

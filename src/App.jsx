@@ -7,9 +7,8 @@ import './App.css'
 function LoginPage() {
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
-  const redirect = searchParams.get('redirect') || '/dashboard'
-
-  return <Login onLogin={() => navigate(redirect)} />
+  const sim = searchParams.get('sim') === '1'
+  return <Login onLogin={() => navigate(sim ? '/dashboard?sim=1' : '/dashboard')} />
 }
 
 export default function App() {
@@ -18,7 +17,7 @@ export default function App() {
       <Route path="/" element={<LandingPage />} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/dashboard" element={<Dashboard />} />
-      <Route path="/simulate" element={<Navigate to="/login?redirect=/dashboard?sim=1" replace />} />
+      <Route path="/simulate" element={<Navigate to="/login?sim=1" replace />} />
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   )
