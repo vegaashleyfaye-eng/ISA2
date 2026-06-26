@@ -46,7 +46,6 @@ export default function PasswordChecker() {
   const [email, setEmail]             = useState('')
   const [emailSubmitted, setEmailSubmitted] = useState(false)
   const [otpSent, setOtpSent]         = useState(false)
-  const [otpCode, setOtpCode]         = useState('')
   const [otpDigits, setOtpDigits]     = useState(['','','','','',''])
   const [otpVerified, setOtpVerified] = useState(false)
   const [otpError, setOtpError]       = useState('')
@@ -59,22 +58,40 @@ export default function PasswordChecker() {
   const allPassed = passed === CHECKS.length
   const strength  = getStrength(passed, CHECKS.length)
 
-  const sendOTP = () => {
+  const [otpLoading, setOtpLoading] = useState(false)
+
+  const sendOTP = async () => {
     if (!email.includes('@') || !email.includes('.')) return
-    const code = Math.floor(100000 + Math.random() * 900000).toString()
-    setOtpCode(code)
-    setOtpSent(true)
+    setOtpLoading(true)
     setOtpError('')
-    setOtpDigits(['','','','','',''])
-    setOtpCooldown(30)
-    clearInterval(cooldownRef.current)
-    cooldownRef.current = setInterval(() => {
-      setOtpCooldown(prev => {
-        if (prev <= 1) { clearInterval(cooldownRef.current); return 0 }
-        return prev - 1
+    try {
+      const res = await fetch('http://localhost:3001/api/send-otp', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email }),
       })
-    }, 1000)
-    setTimeout(() => digitRefs.current[0]?.focus(), 100)
+      const data = await res.json()
+      if (!res.ok) {
+        setOtpError(data.error || 'Failed to send OTP. Please try again.')
+        setOtpLoading(false)
+        return
+      }
+      setOtpSent(true)
+      setOtpError('')
+      setOtpDigits(['','','','','',''])
+      setOtpCooldown(30)
+      clearInterval(cooldownRef.current)
+      cooldownRef.current = setInterval(() => {
+        setOtpCooldown(prev => {
+          if (prev <= 1) { clearInterval(cooldownRef.current); return 0 }
+          return prev - 1
+        })
+      }, 1000)
+      setTimeout(() => digitRefs.current[0]?.focus(), 100)
+    } catch {
+      setOtpError('Could not reach the server. Make sure the backend is running.')
+    }
+    setOtpLoading(false)
   }
 
   const handleDigitChange = (idx, val) => {
@@ -92,16 +109,28 @@ export default function PasswordChecker() {
     }
   }
 
-  const verifyOTP = () => {
+  const verifyOTP = async () => {
     const entered = otpDigits.join('')
-    if (entered === otpCode) {
-      setOtpVerified(true)
-      setOtpError('')
-    } else {
-      setOtpError('Incorrect code. Please check the code displayed above and try again.')
-      setOtpDigits(['','','','','',''])
-      digitRefs.current[0]?.focus()
+    setOtpLoading(true)
+    try {
+      const res = await fetch('http://localhost:3001/api/verify-otp', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, code: entered }),
+      })
+      const data = await res.json()
+      if (!res.ok) {
+        setOtpError(data.error || 'Incorrect code. Please try again.')
+        setOtpDigits(['','','','','',''])
+        digitRefs.current[0]?.focus()
+      } else {
+        setOtpVerified(true)
+        setOtpError('')
+      }
+    } catch {
+      setOtpError('Could not reach the server. Make sure the backend is running.')
     }
+    setOtpLoading(false)
   }
 
   useEffect(() => () => clearInterval(cooldownRef.current), [])
@@ -256,16 +285,15 @@ export default function PasswordChecker() {
                 <button
                   className="pc-btn-send"
                   onClick={sendOTP}
-                  disabled={!email.includes('@')}
+                  disabled={!email.includes('@') || otpLoading}
                 >
-                  Send OTP
+                  {otpLoading ? 'Sending…' : 'Send OTP'}
                 </button>
               </div>
             ) : (
               <div className="pc-otp-block">
                 <div className="pc-otp-info">
-                  Code sent to <strong>{email}</strong>.
-                  <span className="pc-otp-demo"> (Demo code: <strong>{otpCode}</strong>)</span>
+                  Code sent to <strong>{email}</strong>. Check your inbox.
                 </div>
 
                 <div className="pc-otp-digits">
@@ -287,8 +315,8 @@ export default function PasswordChecker() {
                 {otpError && <div className="pc-otp-error">{otpError}</div>}
 
                 <div className="pc-otp-actions">
-                  <button className="pc-btn-verify" onClick={verifyOTP} disabled={otpDigits.join('').length < 6}>
-                    Verify Code
+                  <button className="pc-btn-verify" onClick={verifyOTP} disabled={otpDigits.join('').length < 6 || otpLoading}>
+                    {otpLoading ? 'Verifying…' : 'Verify Code'}
                   </button>
                   <button
                     className="pc-btn-resend"
